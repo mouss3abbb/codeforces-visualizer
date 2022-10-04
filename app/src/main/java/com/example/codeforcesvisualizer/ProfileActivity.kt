@@ -43,7 +43,7 @@ class ProfileActivity : AppCompatActivity() {
         })
         binding.fullName.text = "$fullName "
         binding.handle.text = "$handle "
-        binding.rank.text = "$rank"
+        binding.rank.text = "$rank "
         binding.maxRank.text = "max $maxRank"
         binding.maxRating.text = "max $maxRating"
         binding.contestRating.text = "$rating "
