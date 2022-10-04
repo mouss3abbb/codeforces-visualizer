@@ -9,9 +9,11 @@
     </data>
 
     <ScrollView
+        android:id="@+id/sv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="16dp"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
         tools:context=".ProfileActivity">
 
 
@@ -37,50 +39,123 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/imageCardView" />
 
+            <com.github.mikephil.charting.charts.PieChart
+                android:id="@+id/verdicts"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:layout_marginTop="16dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/problemRatingChart"/>
+
+            <TextView
+                android:id="@+id/rankPlace"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Rank "
+                android:textStyle="bold"
+                app:layout_constraintBottom_toTopOf="@+id/handlePlace"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
             <TextView
                 android:id="@+id/rank"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Rank"
-                app:layout_constraintBottom_toTopOf="@+id/handle"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@id/rankPlace"
+                app:layout_constraintStart_toEndOf="@+id/rankPlace"
+                app:layout_constraintTop_toTopOf="@id/rankPlace" />
+
+            <TextView
+                android:id="@+id/maxRank"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@id/rankPlace"
+                app:layout_constraintStart_toEndOf="@+id/rankPlace"
+                app:layout_constraintTop_toTopOf="@id/rankPlace" />
+
+            <TextView
+                android:id="@+id/contestRatingPlace"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Rating "
+                android:textStyle="bold"
+                app:layout_constraintBottom_toTopOf="@+id/contributionPlace"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toBottomOf="@+id/fullNamePlace" />
 
             <TextView
                 android:id="@+id/contestRating"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Contest Rating: "
-                app:layout_constraintBottom_toTopOf="@+id/contribution"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@id/contestRatingPlace"
+                app:layout_constraintStart_toEndOf="@+id/contestRatingPlace"
+                app:layout_constraintTop_toTopOf="@id/contestRatingPlace" />
+
+            <TextView
+                android:id="@+id/maxRating"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@id/contestRatingPlace"
+                app:layout_constraintStart_toEndOf="@+id/contestRatingPlace"
+                app:layout_constraintTop_toTopOf="@id/contestRatingPlace" />
+
+            <TextView
+                android:id="@+id/contributionPlace"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Contribution "
+                android:textStyle="bold"
+                app:layout_constraintBottom_toTopOf="@+id/ratingChart"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/fullName" />
+                app:layout_constraintTop_toBottomOf="@+id/contestRatingPlace" />
 
             <TextView
                 android:id="@+id/contribution"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Contribution"
-                app:layout_constraintBottom_toTopOf="@+id/ratingChart"
+                app:layout_constraintBottom_toBottomOf="@id/contributionPlace"
+                app:layout_constraintStart_toEndOf="@+id/contributionPlace"
+                app:layout_constraintTop_toTopOf="@id/contributionPlace" />
+
+            <TextView
+                android:id="@+id/fullNamePlace"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Full Name "
+                android:textStyle="bold"
+                app:layout_constraintBottom_toTopOf="@+id/contestRatingPlace"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/contestRating" />
+                app:layout_constraintTop_toBottomOf="@+id/handlePlace" />
 
             <TextView
                 android:id="@+id/fullName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Full Name"
-                app:layout_constraintBottom_toTopOf="@+id/contestRating"
+                app:layout_constraintBottom_toBottomOf="@id/fullNamePlace"
+                app:layout_constraintStart_toEndOf="@+id/imageCardView"
+                app:layout_constraintTop_toTopOf="@id/fullNamePlace" />
+
+            <TextView
+                android:id="@+id/handlePlace"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Handle "
+                android:textStyle="bold"
+                app:layout_constraintBottom_toTopOf="@+id/fullNamePlace"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/handle" />
+                app:layout_constraintTop_toBottomOf="@+id/rankPlace" />
 
             <TextView
                 android:id="@+id/handle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Handle"
-                app:layout_constraintBottom_toTopOf="@+id/fullName"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/rank" />
+                app:layout_constraintBottom_toBottomOf="@id/handlePlace"
+                app:layout_constraintStart_toEndOf="@+id/imageCardView"
+                app:layout_constraintTop_toTopOf="@id/handlePlace" />
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/imageCardView"
@@ -88,13 +163,13 @@
                 android:layout_height="wrap_content"
                 app:cardCornerRadius="100dp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginTop="16dp">
 
                 <ImageView
                     android:id="@+id/imageView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    tools:srcCompat="@tools:sample/avatars" />
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"/>
             </androidx.cardview.widget.CardView>
 
         </androidx.constraintlayout.widget.ConstraintLayout>

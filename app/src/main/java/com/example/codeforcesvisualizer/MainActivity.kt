@@ -16,20 +16,24 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var userInfoHandle: UserInfo
     private val TAG = "MainActivity"
-    private val verdict : MutableMap<String,Int> = mutableMapOf()
     private val problemRating = ArrayList<Int>()
     private val problemRatingCount = Array<Int>(4000) { 0 }
+    private var AC = 0
+    private var WA = 0
+    private var TLE = 0
+    private var OTHER = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         binding.analyzeBtn.setOnClickListener{
-            getUserInfo()
+            doNetworkCalls()
         }
+
     }
 
-    private fun getUserInfo(){
+    private fun doNetworkCalls(){
         val retrofit = Retrofit.Builder()
             .baseUrl(base_url)
             .addConverterFactory(GsonConverterFactory.create())
@@ -37,7 +41,17 @@ class MainActivity : AppCompatActivity() {
         val codeforcesApi = retrofit.create(CodeforcesApi::class.java)
         val activityIntent = Intent(applicationContext, ProfileActivity::class.java)
         val handle = binding.handleEt.text.toString().trim()
+        userInfoCall(handle,codeforcesApi,activityIntent)
+        userRatingCall(handle, codeforcesApi, activityIntent)
+        userStatusCall(handle, codeforcesApi, activityIntent)
 
+    }
+
+    private fun userInfoCall(
+        handle:String,
+        codeforcesApi: CodeforcesApi,
+        activityIntent: Intent
+    ){
         val userInfoCall = codeforcesApi.getUser(handle)
         userInfoCall.enqueue(object : Callback<User> {
             override fun onResponse(call: Call<User>, response: Response<User>) {
@@ -45,15 +59,15 @@ class MainActivity : AppCompatActivity() {
                 if(response.body()?.status != "OK")return
                 userInfoHandle = response.body()?.result?.get(0)!!
                 activityIntent.putExtra("avatar", userInfoHandle.avatar)
-                        .putExtra("contribution", userInfoHandle.contribution)
-                        .putExtra("firstName", userInfoHandle.firstName)
-                        .putExtra("lastName", userInfoHandle.lastName)
-                        .putExtra("friendOfCount", userInfoHandle.friendOfCount)
-                        .putExtra("maxRank", userInfoHandle.maxRank)
-                        .putExtra("maxRating", userInfoHandle.maxRating)
-                        .putExtra("rank", userInfoHandle.rank)
-                        .putExtra("rating", userInfoHandle.rating)
-                        .putExtra("handle", handle)
+                    .putExtra("contribution", userInfoHandle.contribution)
+                    .putExtra("firstName", userInfoHandle.firstName)
+                    .putExtra("lastName", userInfoHandle.lastName)
+                    .putExtra("friendOfCount", userInfoHandle.friendOfCount)
+                    .putExtra("maxRank", userInfoHandle.maxRank)
+                    .putExtra("maxRating", userInfoHandle.maxRating)
+                    .putExtra("rank", userInfoHandle.rank)
+                    .putExtra("rating", userInfoHandle.rating)
+                    .putExtra("handle", handle)
 
             }
 
@@ -61,7 +75,13 @@ class MainActivity : AppCompatActivity() {
 
             }
         })
+    }
 
+    private fun userRatingCall(
+        handle: String,
+        codeforcesApi: CodeforcesApi,
+        activityIntent: Intent
+    ){
         val userRatingCall = codeforcesApi.getUserRating(handle)
         userRatingCall.enqueue(object : Callback<UserRating>{
             override fun onResponse(call: Call<UserRating>, response: Response<UserRating>) {
@@ -80,7 +100,13 @@ class MainActivity : AppCompatActivity() {
             override fun onFailure(call: Call<UserRating>, t: Throwable) {
             }
         })
+    }
 
+    private fun userStatusCall(
+        handle: String,
+        codeforcesApi: CodeforcesApi,
+        activityIntent: Intent
+    ){
         val userStatusCall = codeforcesApi.getUserStatus(handle)
         userStatusCall.enqueue(object : Callback<UserStatus>{
             override fun onResponse(call: Call<UserStatus>, response: Response<UserStatus>) {
@@ -89,7 +115,12 @@ class MainActivity : AppCompatActivity() {
                     for(submission in submissionList){
                         problemRatingCount[submission.problem.rating?:0]++
                         Log.d(TAG, "onResponse: ${submission.problem.rating}")
-                        verdict[submission.verdict]?.inc()
+                        when (submission.verdict) {
+                            "OK" -> AC++
+                            "WRONG_ANSWER" -> WA++
+                            "TIME_LIMIT_EXCEEDED" -> TLE++
+                            else -> OTHER++
+                        }
                     }
                 }
                 for(i in 1..3999){
@@ -97,17 +128,18 @@ class MainActivity : AppCompatActivity() {
                 }
                 activityIntent.putExtra("problemRating",problemRating.toIntArray())
                     .putExtra("problemRatingCount",problemRatingCount.toIntArray())
-                    .putExtra("AC",verdict["OK"])
-                    .putExtra("WA",verdict["WRONG_ANSWER"])
-                    .putExtra("TLE",verdict["TIME_LIMIT_EXCEEDED"])
+                    .putExtra("AC",AC)
+                    .putExtra("WA",WA)
+                    .putExtra("TLE",TLE)
+                    .putExtra("OTHER",OTHER)
                 startActivity(activityIntent)
             }
 
             override fun onFailure(call: Call<UserStatus>, t: Throwable) {
             }
         })
-
-
     }
+
+
 
 }
